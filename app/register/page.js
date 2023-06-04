@@ -22,6 +22,30 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(data);
+
+    const {name, email, password, confirmPassword} = data;
+
+    
+    try{
+      const newData = {
+        name, email, password
+      }
+      await fetch("/api/register", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newData),
+      }).then((data) => {
+        console.log(data);
+      });
+
+      console.log(response);
+    }
+    catch(err){
+      console.log(err);
+    }
   }
 
   return (
