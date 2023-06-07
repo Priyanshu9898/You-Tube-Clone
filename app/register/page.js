@@ -3,10 +3,14 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from 'next/image';
+import {useRouter} from "next/navigation";
+import { toast } from "react-hot-toast";
 
 
 
 const Register = () => {
+
+  const router = useRouter();
 
   const [data, setData] = useState({
     name: "",
@@ -30,21 +34,40 @@ const Register = () => {
       const newData = {
         name, email, password
       }
-      await fetch("/api/register", {
+      const response = await fetch("/api/register", {
         method: "POST",
-        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(newData),
-      }).then((data) => {
-        console.log(data);
-      });
+      })
 
       console.log(response);
+
+      if(response.status === 200 && response.ok === true) {
+
+        toast.success("User Registered successfully")
+    
+        setData({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+    
+    
+        router.push("/");
+
+      }
+      else{
+        toast.error("Error creating new user");
+      }
+
+      
     }
     catch(err){
-      console.log(err);
+      console.log("err", err);
+      toast.error(err);
     }
   }
 
